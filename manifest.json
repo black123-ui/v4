@@ -1,0 +1,22 @@
+{
+  "name": "Lütfi Clicker",
+  "short_name": "Lütfi Clicker",
+  "description": "Tıkla, kazan, güçlen!",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#120000",
+  "theme_color": "#8b0000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

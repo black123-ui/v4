@@ -1,0 +1,3299 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <link rel="manifest" href="./manifest.json">
+
+    <title>Lütfi Clicker</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    #351010 0%,
+                    #160707 45%,
+                    #050505 100%
+                );
+
+            color: white;
+
+            font-family: Arial, sans-serif;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            overflow-x: hidden;
+
+        }
+
+
+        .game {
+
+            width: 100%;
+
+            max-width: 700px;
+
+            padding: 25px;
+
+            text-align: center;
+
+        }
+
+
+        h1 {
+
+            margin: 0 0 5px;
+
+            font-size: 40px;
+
+            text-shadow: 0 0 15px red;
+
+        }
+
+
+        .subtitle {
+
+            color: #888;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 12px;
+
+        }
+
+
+        .stat {
+
+            background:
+                rgba(255,255,255,0.06);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.12);
+
+            border-radius: 15px;
+
+            padding: 15px;
+
+            backdrop-filter: blur(5px);
+
+        }
+
+
+        .stat-title {
+
+            color: #888;
+
+            font-size: 13px;
+
+        }
+
+
+        .stat-value {
+
+            margin-top: 5px;
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+        }
+
+
+        .level-box {
+
+            margin-top: 15px;
+
+            background:
+                rgba(255,255,255,0.06);
+
+            border-radius: 15px;
+
+            padding: 15px;
+
+        }
+
+
+        .level-text {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 8px;
+
+            font-size: 14px;
+
+        }
+
+
+        .progress {
+
+            width: 100%;
+
+            height: 12px;
+
+            background: #222;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+        }
+
+
+        #progressBar {
+
+            height: 100%;
+
+            width: 0%;
+
+            background: red;
+
+            border-radius: 20px;
+
+            box-shadow: 0 0 10px red;
+
+            transition: width 0.3s;
+
+        }
+
+
+        .click-area {
+
+            position: relative;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            margin: 35px 0 20px;
+
+        }
+
+
+        #clickButton {
+
+            width: 220px;
+
+            height: 220px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            background:
+                radial-gradient(
+                    circle at 35% 30%,
+                    #ff5555,
+                    #e00000 55%,
+                    #850000
+                );
+
+            color: white;
+
+            font-size: 32px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 0 25px red,
+                0 0 60px rgba(255,0,0,0.4),
+                inset 0 -15px 30px rgba(0,0,0,0.3);
+
+            transition:
+                transform 0.08s,
+                filter 0.2s;
+
+        }
+
+
+        #clickButton:hover {
+
+            filter: brightness(1.15);
+
+        }
+
+
+        #clickButton:active {
+
+            transform: scale(0.88);
+
+        }
+
+
+        #nextReward {
+
+            color: #999;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .upgrades {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 12px;
+
+        }
+
+
+        .upgrade {
+
+            background: #141414;
+
+            border: 1px solid #303030;
+
+            border-radius: 15px;
+
+            padding: 18px;
+
+        }
+
+
+        .upgrade h3 {
+
+            margin: 0 0 8px;
+
+        }
+
+
+        .upgrade p {
+
+            color: #888;
+
+            font-size: 14px;
+
+            min-height: 35px;
+
+        }
+
+
+        .upgrade button {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #333;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .upgrade button:hover {
+
+            background: #444;
+
+        }
+
+
+        .upgrade button:disabled {
+
+            opacity: 0.4;
+
+            cursor: not-allowed;
+
+        }
+
+
+        .achievements {
+
+            margin-top: 20px;
+
+            text-align: left;
+
+            background:
+                rgba(255,255,255,0.05);
+
+            border-radius: 15px;
+
+            padding: 18px;
+
+        }
+
+
+        .achievements h2 {
+
+            margin-top: 0;
+
+            text-align: center;
+
+        }
+
+
+        .achievement {
+
+            padding: 10px;
+
+            margin-top: 7px;
+
+            border-radius: 8px;
+
+            background: #181818;
+
+            color: #666;
+
+        }
+
+
+        .achievement.unlocked {
+
+            color: white;
+
+            background: #302000;
+
+        }
+
+
+        #resetButton {
+
+            margin-top: 20px;
+
+            padding: 10px 20px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #222;
+
+            color: #777;
+
+            cursor: pointer;
+
+        }
+
+
+        #resetButton:hover {
+
+            background: #333;
+
+            color: white;
+
+        }
+
+
+        .floating {
+
+            position: absolute;
+
+            pointer-events: none;
+
+            color: white;
+
+            font-size: 27px;
+
+            font-weight: bold;
+
+            animation: floatUp 0.9s forwards;
+
+        }
+
+
+        @keyframes floatUp {
+
+            0% {
+
+                opacity: 1;
+
+                transform:
+                    translate(-50%, 0)
+                    scale(1);
+
+            }
+
+            100% {
+
+                opacity: 0;
+
+                transform:
+                    translate(-50%, -110px)
+                    scale(1.5);
+
+            }
+
+        }
+
+
+        #rewardMessage {
+
+            position: fixed;
+
+            left: 50%;
+
+            top: 50%;
+
+            transform:
+                translate(-50%, -50%)
+                scale(0);
+
+            font-size: 60px;
+
+            font-weight: bold;
+
+            color: white;
+
+            text-shadow:
+                0 0 20px red,
+                0 0 50px red;
+
+            pointer-events: none;
+
+            z-index: 100;
+
+        }
+
+
+        .rewardAnimation {
+
+            animation: rewardPop 1.2s forwards;
+
+        }
+
+
+        @keyframes rewardPop {
+
+            0% {
+
+                transform:
+                    translate(-50%, -50%)
+                    scale(0);
+
+                opacity: 0;
+
+            }
+
+            30% {
+
+                transform:
+                    translate(-50%, -50%)
+                    scale(1.2);
+
+                opacity: 1;
+
+            }
+
+            70% {
+
+                transform:
+                    translate(-50%, -50%)
+                    scale(1);
+
+                opacity: 1;
+
+            }
+
+            100% {
+
+                transform:
+                    translate(-50%, -50%)
+                    scale(1.4);
+
+                opacity: 0;
+
+            }
+
+        }
+
+
+        .signature {
+
+            position: fixed;
+
+            right: 15px;
+
+            bottom: 10px;
+
+            color: black;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            z-index: 1000;
+
+            pointer-events: none;
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .game {
+
+                padding: 18px;
+
+            }
+
+
+            h1 {
+
+                font-size: 30px;
+
+            }
+
+
+            #clickButton {
+
+                width: 180px;
+
+                height: 180px;
+
+                font-size: 27px;
+
+            }
+
+
+            .upgrades {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .stats {
+
+                gap: 8px;
+
+            }
+
+
+            .stat {
+
+                padding: 12px;
+
+            }
+
+
+            .stat-value {
+
+                font-size: 20px;
+
+            }
+
+        }
+
+
+        /* DÜKKAN */
+
+        .shop-button {
+
+            position: fixed;
+
+            right: 30px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            background: #d40000;
+
+            color: white;
+
+            border: 3px solid #900000;
+
+            border-radius: 15px;
+
+            padding: 18px 22px;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            z-index: 1000;
+
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+
+        }
+
+
+        .shop-button:hover {
+
+            background: #f00000;
+
+            transform:
+                translateY(-50%)
+                scale(1.05);
+
+        }
+
+
+        .shop {
+
+            display: none;
+
+            position: fixed;
+
+            left: 50%;
+
+            top: 50%;
+
+            transform:
+                translate(-50%, -50%);
+
+            width: 95%;
+
+            max-width: 1200px;
+
+            background: white;
+
+            border: 4px solid #d40000;
+
+            border-radius: 20px;
+
+            padding: 20px;
+
+            z-index: 2000;
+
+            box-shadow:
+                0 10px 40px
+                rgba(0,0,0,0.4);
+
+        }
+
+
+        .shop h2 {
+
+            text-align: center;
+
+            color: #d40000;
+
+            margin-top: 0;
+
+        }
+
+
+        .shop-items {
+
+            display: flex;
+
+            gap: 12px;
+
+            justify-content: flex-start;
+
+            overflow-x: auto;
+
+        }
+
+
+        .shop-item {
+
+            min-width: 170px;
+
+            background: #f5f5f5;
+
+            border: 2px solid #ccc;
+
+            border-radius: 15px;
+
+            padding: 15px;
+
+            text-align: center;
+
+        }
+
+
+        .shop-item h3 {
+
+            margin-top: 0;
+
+            color: black;
+
+        }
+
+
+        .shop-item p {
+
+            font-size: 14px;
+
+            color: black;
+
+        }
+
+
+        .buy-button {
+
+            background: #d40000;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 10px;
+
+            padding: 10px 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .buy-button:hover {
+
+            background: #a00000;
+
+        }
+
+
+        .buy-button:disabled {
+
+            background: #777;
+
+            cursor: not-allowed;
+
+        }
+
+
+        .close-shop {
+
+            display: block;
+
+            margin: 20px auto 0;
+
+            background: #333;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 10px;
+
+            padding: 10px 20px;
+
+            cursor: pointer;
+
+        }
+
+
+        /* İSİM EKRANI */
+
+        .name-screen {
+
+            position: fixed;
+
+            inset: 0;
+
+            background: #120000;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            z-index: 10000;
+
+        }
+
+
+        .name-box {
+
+            background: #250000;
+
+            padding: 30px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            width: 90%;
+
+            max-width: 400px;
+
+            box-shadow:
+                0 0 30px
+                rgba(255, 0, 0, 0.35);
+
+        }
+
+
+        .name-box h1 {
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .name-box h2 {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .name-box input {
+
+            width: 90%;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            border: none;
+
+            outline: none;
+
+            font-size: 16px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .name-box button {
+
+            padding: 13px 25px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* LİDERLİK */
+
+        #leaderboardButton {
+
+            position: fixed;
+
+            top: 15px;
+
+            left: 15px;
+
+            width: 50px;
+
+            height: 50px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            background: #8b0000;
+
+            color: white;
+
+            font-size: 25px;
+
+            cursor: pointer;
+
+            z-index: 5000;
+
+            box-shadow:
+                0 0 12px
+                rgba(255, 0, 0, 0.4);
+
+        }
+
+
+        #leaderboardButton:hover {
+
+            transform: scale(1.08);
+
+        }
+
+
+        .leaderboard-screen {
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0, 0, 0, 0.85);
+
+            display: none;
+
+            justify-content: center;
+
+            align-items: center;
+
+            z-index: 9000;
+
+        }
+
+
+        .leaderboard-box {
+
+            position: relative;
+
+            background: #250000;
+
+            width: 90%;
+
+            max-width: 600px;
+
+            max-height: 85vh;
+
+            padding: 25px;
+
+            border-radius: 20px;
+
+            overflow-y: auto;
+
+            box-shadow:
+                0 0 30px
+                rgba(255, 0, 0, 0.4);
+
+        }
+
+
+        .leaderboard-box h1 {
+
+            text-align: center;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .leaderboard-box > p {
+
+            text-align: center;
+
+            opacity: 0.7;
+
+        }
+
+
+        .close-leaderboard {
+
+            position: absolute;
+
+            right: 15px;
+
+            top: 15px;
+
+            border: none;
+
+            background: transparent;
+
+            color: white;
+
+            font-size: 25px;
+
+            cursor: pointer;
+
+        }
+
+
+        .leaderboard-player {
+
+            display: grid;
+
+            grid-template-columns:
+                45px 1fr 100px;
+
+            gap: 10px;
+
+            align-items: center;
+
+            padding: 12px;
+
+            margin: 7px 0;
+
+            background: #3a0000;
+
+            border-radius: 10px;
+
+        }
+
+
+        .leaderboard-rank {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+
+        .leaderboard-name {
+
+            font-weight: bold;
+
+        }
+
+
+        .leaderboard-stats {
+
+            font-size: 12px;
+
+            text-align: right;
+
+            opacity: 0.85;
+
+        }
+
+    </style>
+
+
+    <!-- SERVICE WORKER -->
+
+  <script>
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", async function () {
+
+        try {
+
+            const registration =
+                await navigator.serviceWorker.register(
+                    "./service-worker.js",
+                    {
+                        updateViaCache: "none"
+                    }
+                );
+
+            // Açılışta güncelleme kontrolü
+            await registration.update();
+
+            // Yeni Service Worker bulunduğunda
+            registration.addEventListener(
+                "updatefound",
+                function () {
+
+                    const newWorker =
+                        registration.installing;
+
+                    if (!newWorker) {
+                        return;
+                    }
+
+                    newWorker.addEventListener(
+                        "statechange",
+                        function () {
+
+                            if (
+                                newWorker.state === "installed" &&
+                                navigator.serviceWorker.controller
+                            ) {
+
+                                console.log(
+                                    "🎉 Yeni Lütfi Clicker sürümü bulundu!"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+            // Yeni Service Worker aktif olduğunda
+            navigator.serviceWorker.addEventListener(
+                "controllerchange",
+                function () {
+
+                    console.log(
+                        "🔄 Lütfi Clicker güncelleniyor..."
+                    );
+
+                    window.location.reload();
+
+                }
+            );
+
+            // Her saat yeni sürüm kontrolü
+            setInterval(
+                function () {
+                    registration.update();
+                },
+                60 * 60 * 1000
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Service Worker hatası:",
+                error
+            );
+
+        }
+
+    });
+
+}
+</script>
+    <!-- FIREBASE -->
+
+    <script type="module">
+
+        import {
+            initializeApp
+        } from
+        "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+
+        import {
+
+            getFirestore,
+
+            collection,
+
+            doc,
+
+            setDoc,
+
+            getDocs,
+
+            query,
+
+            orderBy,
+
+            limit
+
+        } from
+        "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+        const firebaseConfig = {
+
+            apiKey:
+                "AIzaSyD9jA8jUmy-HR_91EnRCgOkrdf-Rar2epU",
+
+            authDomain:
+                "lutfi-clicker.firebaseapp.com",
+
+            projectId:
+                "lutfi-clicker",
+
+            storageBucket:
+                "lutfi-clicker.firebasestorage.app",
+
+            messagingSenderId:
+                "924243526355",
+
+            appId:
+                "1:924243526355:web:7590e6c6eb9c7ecbe64a26",
+
+            measurementId:
+                "G-R24J6KWKZL"
+
+        };
+
+
+        const app =
+            initializeApp(firebaseConfig);
+
+
+        const db =
+            getFirestore(app);
+
+
+        window.firebaseDB =
+            db;
+
+
+        window.firebaseCollection =
+            collection;
+
+
+        window.firebaseDoc =
+            doc;
+
+
+        window.firebaseSetDoc =
+            setDoc;
+
+
+        window.firebaseGetDocs =
+            getDocs;
+
+
+        window.firebaseQuery =
+            query;
+
+
+        window.firebaseOrderBy =
+            orderBy;
+
+
+        window.firebaseLimit =
+            limit;
+
+    </script>
+
+</head>
+
+
+<body>
+
+
+<!-- İSİM EKRANI -->
+
+<div id="nameScreen"
+     class="name-screen">
+
+    <div class="name-box">
+
+        <h1>🎮 Lütfi Clicker</h1>
+<div style="font-size: 18px; color: orange; margin-top: 8px;">
+    🚀 GÜNCELLEME TESTİ v3
+</div>
+        <h2>Adınız ne?</h2>
+
+        <input
+            type="text"
+            id="playerNameInput"
+            placeholder="Adınızı yazın..."
+            maxlength="20"
+        >
+
+        <button onclick="savePlayerName()">
+
+            Oyuna Başla 🚀
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- LİDERLİK BUTONU -->
+
+<button
+    id="leaderboardButton"
+    onclick="openLeaderboard()">
+
+    🏅
+
+</button>
+
+
+<!-- LİDERLİK EKRANI -->
+
+<div
+    id="leaderboardScreen"
+    class="leaderboard-screen">
+
+    <div class="leaderboard-box">
+
+        <button
+            class="close-leaderboard"
+            onclick="closeLeaderboard()">
+
+            ✕
+
+        </button>
+
+
+        <h1>
+            🏆 Liderlik Tablosu
+        </h1>
+
+
+        <p>
+            İlk 20 Oyuncu
+        </p>
+
+
+        <div id="leaderboardList"></div>
+
+    </div>
+
+</div>
+
+
+<!-- ANA OYUN -->
+
+<div class="game">
+
+
+    <h1>
+        Lütfi Clicker
+    </h1>
+
+
+    <div class="subtitle">
+
+        Tıkla, kazan, güçlen!
+
+    </div>
+
+
+    <div class="stats">
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                TOPLAM TIKLAMA
+            </div>
+
+            <div
+                class="stat-value"
+                id="clicks">
+
+                0
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                PARA
+            </div>
+
+            <div
+                class="stat-value"
+                id="money">
+
+                0
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                ÇARPAN
+            </div>
+
+            <div
+                class="stat-value"
+                id="multiplier">
+
+                ×1
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                OTOMATİK
+            </div>
+
+            <div
+                class="stat-value"
+                id="auto">
+
+                0 / sn
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEVİYE -->
+
+    <div class="level-box">
+
+        <div class="level-text">
+
+            <span>
+
+                ⭐ Seviye
+                <b id="level">1</b>
+
+            </span>
+
+
+            <span id="levelProgress">
+
+                0 / 100
+
+            </span>
+
+        </div>
+
+
+        <div class="progress">
+
+            <div id="progressBar"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TIKLAMA -->
+
+    <div class="click-area">
+
+        <button id="clickButton">
+
+            TIKLA
+
+        </button>
+
+    </div>
+
+
+    <div id="nextReward">
+
+        Sonraki ödül: 100
+
+    </div>
+
+
+    <!-- YÜKSELTMELER -->
+
+    <div class="upgrades">
+
+
+        <div class="upgrade">
+
+            <h3>
+                ⚡ Tıklama Gücü
+            </h3>
+
+            <p>
+                Her tıklamada daha fazla kazan.
+            </p>
+
+            <button id="powerButton">
+
+                Güç +1
+
+                <br>
+
+                💰
+                <span id="powerCost">
+                    50
+                </span>
+
+            </button>
+
+        </div>
+
+
+        <div class="upgrade">
+
+            <h3>
+                🤖 Otomatik Tıklayıcı
+            </h3>
+
+            <p>
+                Her saniye otomatik tıklama yap.
+            </p>
+
+            <button id="autoButton">
+
+                +1 / saniye
+
+                <br>
+
+                💰
+                <span id="autoCost">
+                    250
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- BAŞARIMLAR -->
+
+    <div class="achievements">
+
+        <h2>
+            🏆 Başarımlar
+        </h2>
+
+
+        <div
+            class="achievement"
+            id="achievement100">
+
+            🔴 İlk 100
+            — 100 tıklamaya ulaş.
+
+        </div>
+
+
+        <div
+            class="achievement"
+            id="achievement1000">
+
+            🟠 Binlik
+            — 1.000 tıklamaya ulaş.
+
+        </div>
+
+
+        <div
+            class="achievement"
+            id="achievement10000">
+
+            🟡 On Binlik
+            — 10.000 tıklamaya ulaş.
+
+        </div>
+
+
+        <div
+            class="achievement"
+            id="achievement100000">
+
+            🔥 Efsane
+            — 100.000 tıklamaya ulaş.
+
+        </div>
+
+
+        <div
+            class="achievement"
+            id="achievementMillion">
+
+            👑 Milyoner
+            — 1.000.000 tıklamaya ulaş.
+
+        </div>
+
+    </div>
+
+
+    <button id="resetButton">
+
+        Oyunu Sıfırla
+
+    </button>
+
+
+</div>
+
+
+<!-- ÖDÜL -->
+
+<div id="rewardMessage">
+
+    ÖDÜL!
+
+</div>
+
+
+<!-- İMZA -->
+
+<div class="signature">
+
+    By Lütfi Ertan Bozkurt
+
+</div>
+
+
+<!-- DÜKKAN BUTONU -->
+
+<button
+    class="shop-button"
+    onclick="openShop()">
+
+    🏪 DÜKKAN
+
+</button>
+
+
+<!-- DÜKKAN -->
+
+<div
+    class="shop"
+    id="shop">
+
+    <h2>
+        🏪 DÜKKAN
+    </h2>
+
+
+    <div class="shop-items">
+
+
+        <div class="shop-item">
+
+            <h3>💧 Su</h3>
+
+            <p>
+                Fiyat: <b>5.000</b> para
+            </p>
+
+            <p>
+                Her tıklamada <b>+100</b>
+            </p>
+
+            <button
+                class="buy-button"
+                id="buyWater"
+                onclick="buyItem('water')">
+
+                SATIN AL
+
+            </button>
+
+        </div>
+
+
+        <div class="shop-item">
+
+            <h3>🍵 Çay</h3>
+
+            <p>
+                Fiyat: <b>75.000</b> para
+            </p>
+
+            <p>
+                Her tıklamada <b>+500</b>
+            </p>
+
+            <button
+                class="buy-button"
+                id="buyTea"
+                onclick="buyItem('tea')">
+
+                SATIN AL
+
+            </button>
+
+        </div>
+
+
+        <div class="shop-item">
+
+            <h3>🍋 Limonata</h3>
+
+            <p>
+                Fiyat: <b>300.000</b> para
+            </p>
+
+            <p>
+                Her tıklamada <b>+1.000</b>
+            </p>
+
+            <button
+                class="buy-button"
+                id="buyLemonade"
+                onclick="buyItem('lemonade')">
+
+                SATIN AL
+
+            </button>
+
+        </div>
+
+
+        <div class="shop-item">
+
+            <h3>⚡ Enerji İçeceği</h3>
+
+            <p>
+                Fiyat: <b>1.000.000</b> para
+            </p>
+
+            <p>
+                Her tıklamada <b>+1.500</b>
+            </p>
+
+            <button
+                class="buy-button"
+                id="buyEnergy"
+                onclick="buyItem('energy')">
+
+                SATIN AL
+
+            </button>
+
+        </div>
+
+
+        <div class="shop-item">
+
+            <h3>🛢️ Motor Yağı</h3>
+
+            <p>
+                Fiyat: <b>2.500.000</b> para
+            </p>
+
+            <p>
+                Her tıklamada <b>+3.000</b>
+            </p>
+
+            <button
+                class="buy-button"
+                id="buyOil"
+                onclick="buyItem('oil')">
+
+                SATIN AL
+
+            </button>
+
+        </div>
+
+
+        <div
+            class="shop-item"
+            id="offerItem">
+
+            <h3>
+                👑 Lütfi Bey'in Teklifi
+            </h3>
+
+            <p>
+                2.000.000.000 toplam tıklamada açılır.
+            </p>
+
+            <p>
+                Tüm tıklama ve paranı kaybedersin.
+            </p>
+
+            <p>
+                Mevcut çarpanın <b>×4</b> olur.
+            </p>
+
+            <button
+                class="buy-button"
+                id="buyOffer"
+                onclick="buyItem('offer')">
+
+                KİLİTLİ
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="close-shop"
+        onclick="closeShop()">
+
+        KAPAT
+
+    </button>
+
+</div>
+
+
+<script>
+
+
+/* =========================
+   OYUNCU ADI
+========================= */
+
+let playerName =
+    localStorage.getItem("lutfiPlayerName");
+
+
+function savePlayerName() {
+
+    const input =
+        document.getElementById(
+            "playerNameInput"
+        );
+
+
+    const name =
+        input.value.trim();
+
+
+    if (name === "") {
+
+        alert(
+            "Lütfen adınızı yazın!"
+        );
+
+        return;
+
+    }
+
+
+    playerName = name;
+
+
+    localStorage.setItem(
+        "lutfiPlayerName",
+        playerName
+    );
+
+
+    document.getElementById(
+        "nameScreen"
+    ).style.display = "none";
+
+
+    updateScreen();
+
+}
+
+
+/* =========================
+   SAYFA AÇILIŞI
+========================= */
+
+window.addEventListener(
+    "load",
+    function () {
+
+        if (playerName) {
+
+            document.getElementById(
+                "nameScreen"
+            ).style.display = "none";
+
+        }
+
+        else {
+
+            document.getElementById(
+                "nameScreen"
+            ).style.display = "flex";
+
+        }
+
+    }
+);
+
+
+/* =========================
+   OYUN VERİLERİ
+========================= */
+
+let clicks =
+    Number(
+        localStorage.getItem("clicks")
+    ) || 0;
+
+
+let money =
+    Number(
+        localStorage.getItem("money")
+    ) || 0;
+
+
+let power =
+    Number(
+        localStorage.getItem("power")
+    ) || 1;
+
+
+let autoClickers =
+    Number(
+        localStorage.getItem("autoClickers")
+    ) || 0;
+
+
+let powerCost =
+    Number(
+        localStorage.getItem("powerCost")
+    ) || 50;
+
+
+let autoCost =
+    Number(
+        localStorage.getItem("autoCost")
+    ) || 250;
+
+
+/* =========================
+   ELEMENTLER
+========================= */
+
+const clicksElement =
+    document.getElementById("clicks");
+
+
+const moneyElement =
+    document.getElementById("money");
+
+
+const multiplierElement =
+    document.getElementById("multiplier");
+
+
+const autoElement =
+    document.getElementById("auto");
+
+
+const clickButton =
+    document.getElementById("clickButton");
+
+
+const nextRewardElement =
+    document.getElementById("nextReward");
+
+
+const powerButton =
+    document.getElementById("powerButton");
+
+
+const autoButton =
+    document.getElementById("autoButton");
+
+
+const rewardMessage =
+    document.getElementById("rewardMessage");
+
+
+const levelElement =
+    document.getElementById("level");
+
+
+const levelProgress =
+    document.getElementById("levelProgress");
+
+
+const progressBar =
+    document.getElementById("progressBar");
+
+
+/* =========================
+   ÇARPAN
+========================= */
+
+function getMultiplier(number) {
+
+    if (number < 100)
+        return 1;
+
+
+    let multiplier = 2;
+
+    let threshold = 100;
+
+
+    while (
+        number >= threshold * 10
+    ) {
+
+        threshold *= 10;
+
+        multiplier *= 2;
+
+    }
+
+
+    return multiplier;
+
+}
+
+
+/* =========================
+   MİLİSTONE
+========================= */
+
+function checkMilestoneBonus(
+    oldClicks,
+    newClicks
+) {
+
+    const milestone =
+        200000000;
+
+
+    let nextMilestone =
+        (
+            Math.floor(
+                oldClicks / milestone
+            ) + 1
+        ) * milestone;
+
+
+    let totalBonus = 0;
+
+
+    while (
+        nextMilestone <= newClicks
+    ) {
+
+        let bonus;
+
+
+        if (
+            nextMilestone < 5000000000
+        ) {
+
+            bonus = 5000;
+
+        }
+
+        else if (
+            nextMilestone < 125000000000
+        ) {
+
+            bonus = 25000;
+
+        }
+
+        else {
+
+            bonus = 100000;
+
+        }
+
+
+        totalBonus += bonus;
+
+
+        nextMilestone += milestone;
+
+    }
+
+
+    if (totalBonus > 0) {
+
+        clicks += totalBonus;
+
+        money += totalBonus;
+
+
+        floatingText(
+            "BONUS +" +
+            totalBonus.toLocaleString(
+                "tr-TR"
+            )
+        );
+
+
+        showReward("BONUS!");
+
+    }
+
+}
+
+
+/* =========================
+   SONRAKİ ÖDÜL
+========================= */
+
+function getNextReward(number) {
+
+    let threshold = 100;
+
+
+    while (
+        threshold <= number
+    ) {
+
+        threshold *= 10;
+
+    }
+
+
+    return threshold;
+
+}
+
+
+/* =========================
+   SEVİYE
+========================= */
+
+function getLevel() {
+
+    return Math.floor(
+        clicks / 1000
+    ) + 1;
+
+}
+
+
+function updateLevel() {
+
+    const level =
+        getLevel();
+
+
+    const previousLevel =
+        level - 1;
+
+
+    const currentStart =
+        previousLevel * 1000;
+
+
+    const progress =
+        clicks - currentStart;
+
+
+    const percentage =
+        Math.min(
+            (progress / 1000) * 100,
+            100
+        );
+
+
+    levelElement.textContent =
+        level;
+
+
+    levelProgress.textContent =
+        Math.min(
+            progress,
+            1000
+        ).toLocaleString(
+            "tr-TR"
+        ) + " / 1.000";
+
+
+    progressBar.style.width =
+        percentage + "%";
+
+}
+
+
+/* =========================
+   BAŞARIMLAR
+========================= */
+
+function updateAchievements() {
+
+    if (clicks >= 100) {
+
+        document
+            .getElementById(
+                "achievement100"
+            )
+            .classList.add(
+                "unlocked"
+            );
+
+    }
+
+
+    if (clicks >= 1000) {
+
+        document
+            .getElementById(
+                "achievement1000"
+            )
+            .classList.add(
+                "unlocked"
+            );
+
+    }
+
+
+    if (clicks >= 10000) {
+
+        document
+            .getElementById(
+                "achievement10000"
+            )
+            .classList.add(
+                "unlocked"
+            );
+
+    }
+
+
+    if (clicks >= 100000) {
+
+        document
+            .getElementById(
+                "achievement100000"
+            )
+            .classList.add(
+                "unlocked"
+            );
+
+    }
+
+
+    if (clicks >= 1000000) {
+
+        document
+            .getElementById(
+                "achievementMillion"
+            )
+            .classList.add(
+                "unlocked"
+            );
+
+    }
+
+}
+
+
+/* =========================
+   DÜKKAN VERİLERİ
+========================= */
+
+let shopItems =
+    JSON.parse(
+        localStorage.getItem(
+            "shopItems"
+        )
+    ) || {
+
+        water: false,
+        tea: false,
+        lemonade: false,
+        energy: false,
+        oil: false,
+        offer: false
+
+    };
+
+
+function getShopPower() {
+
+    let bonus = 0;
+
+
+    if (shopItems.water)
+        bonus += 100;
+
+
+    if (shopItems.tea)
+        bonus += 500;
+
+
+    if (shopItems.lemonade)
+        bonus += 1000;
+
+
+    if (shopItems.energy)
+        bonus += 1500;
+
+
+    if (shopItems.oil)
+        bonus += 3000;
+
+
+    return bonus;
+
+}
+
+
+/* =========================
+   EKRANI GÜNCELLE
+========================= */
+
+function updateScreen() {
+
+    const multiplier =
+        getMultiplier(clicks);
+
+
+    clicksElement.textContent =
+        clicks.toLocaleString(
+            "tr-TR"
+        );
+
+
+    moneyElement.textContent =
+        Math.floor(money)
+        .toLocaleString(
+            "tr-TR"
+        );
+
+
+    multiplierElement.textContent =
+        "×" + multiplier;
+
+
+    autoElement.textContent =
+        autoClickers + " / sn";
+
+
+    nextRewardElement.textContent =
+        "Sonraki ödül: " +
+        getNextReward(clicks)
+        .toLocaleString(
+            "tr-TR"
+        );
+
+
+    document.getElementById(
+        "powerCost"
+    ).textContent =
+        powerCost.toLocaleString(
+            "tr-TR"
+        );
+
+
+    document.getElementById(
+        "autoCost"
+    ).textContent =
+        autoCost.toLocaleString(
+            "tr-TR"
+        );
+
+
+    powerButton.disabled =
+        money < powerCost;
+
+
+    autoButton.disabled =
+        money < autoCost;
+
+
+    updateLevel();
+
+    updateAchievements();
+
+    updateShop();
+
+    saveGame();
+
+}
+
+
+/* =========================
+   KAYDET
+========================= */
+
+async function saveGame() {
+
+    localStorage.setItem(
+        "clicks",
+        clicks
+    );
+
+
+    localStorage.setItem(
+        "money",
+        money
+    );
+
+
+    localStorage.setItem(
+        "power",
+        power
+    );
+
+
+    localStorage.setItem(
+        "autoClickers",
+        autoClickers
+    );
+
+
+    localStorage.setItem(
+        "powerCost",
+        powerCost
+    );
+
+
+    localStorage.setItem(
+        "autoCost",
+        autoCost
+    );
+
+
+    let playerId =
+        localStorage.getItem(
+            "lutfiPlayerId"
+        );
+
+
+    if (!playerId) {
+
+        playerId =
+            crypto.randomUUID();
+
+
+        localStorage.setItem(
+            "lutfiPlayerId",
+            playerId
+        );
+
+    }
+
+
+    if (
+        playerName &&
+        window.firebaseDB
+    ) {
+
+        try {
+
+            await window.firebaseSetDoc(
+
+                window.firebaseDoc(
+                    window.firebaseDB,
+                    "players",
+                    playerId
+                ),
+
+                {
+
+                    name:
+                        playerName,
+
+                    clicks:
+                        Math.floor(
+                            clicks
+                        ),
+
+                    money:
+                        Math.floor(
+                            money
+                        ),
+
+                    time: 0
+
+                }
+
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Firebase kayıt hatası:",
+                error
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================
+   +X ANİMASYONU
+========================= */
+
+function floatingText(value) {
+
+    const text =
+        document.createElement(
+            "div"
+        );
+
+
+    text.className =
+        "floating";
+
+
+    text.textContent =
+        "+" + value;
+
+
+    text.style.left =
+        "50%";
+
+
+    text.style.top =
+        "50%";
+
+
+    document
+        .querySelector(
+            ".click-area"
+        )
+        .appendChild(text);
+
+
+    setTimeout(
+        () => text.remove(),
+        900
+    );
+
+}
+
+
+/* =========================
+   ÖDÜL
+========================= */
+
+function showReward(multiplier) {
+
+    rewardMessage.textContent =
+        "×" +
+        multiplier +
+        " ÖDÜL!";
+
+
+    rewardMessage.classList.remove(
+        "rewardAnimation"
+    );
+
+
+    void rewardMessage.offsetWidth;
+
+
+    rewardMessage.classList.add(
+        "rewardAnimation"
+    );
+
+}
+
+
+/* =========================
+   ANA TIKLAMA
+========================= */
+
+clickButton.addEventListener(
+    "click",
+    function () {
+
+        const oldMultiplier =
+            getMultiplier(clicks);
+
+
+        const earned =
+            oldMultiplier *
+            (
+                power +
+                getShopPower()
+            );
+
+
+        const oldClicks =
+            clicks;
+
+
+        clicks += earned;
+
+        money += earned;
+
+
+        checkMilestoneBonus(
+            oldClicks,
+            clicks
+        );
+
+
+        const newMultiplier =
+            getMultiplier(clicks);
+
+
+        floatingText(
+            earned
+        );
+
+
+        if (
+            newMultiplier >
+            oldMultiplier
+        ) {
+
+            showReward(
+                newMultiplier
+            );
+
+        }
+
+
+        updateScreen();
+
+    }
+);
+
+
+/* =========================
+   TIKLAMA GÜCÜ
+========================= */
+
+powerButton.addEventListener(
+    "click",
+    function () {
+
+        if (
+            money < powerCost
+        )
+            return;
+
+
+        money -= powerCost;
+
+
+        power++;
+
+
+        powerCost =
+            Math.floor(
+                powerCost * 1.7
+            );
+
+
+        updateScreen();
+
+    }
+);
+
+
+/* =========================
+   OTOMATİK TIKLAYICI
+========================= */
+
+autoButton.addEventListener(
+    "click",
+    function () {
+
+        if (
+            money < autoCost
+        )
+            return;
+
+
+        money -= autoCost;
+
+
+        autoClickers++;
+
+
+        autoCost =
+            Math.floor(
+                autoCost * 1.8
+            );
+
+
+        updateScreen();
+
+    }
+);
+
+
+/* =========================
+   OTOMATİK TIKLAMA
+========================= */
+
+setInterval(
+    function () {
+
+        if (
+            autoClickers <= 0
+        )
+            return;
+
+
+        const multiplier =
+            getMultiplier(clicks);
+
+
+        const earned =
+            multiplier *
+            power *
+            autoClickers;
+
+
+        const oldClicks =
+            clicks;
+
+
+        clicks += earned;
+
+
+        money += earned;
+
+
+        checkMilestoneBonus(
+            oldClicks,
+            clicks
+        );
+
+
+        updateScreen();
+
+    },
+    1000
+);
+
+
+/* =========================
+   SIFIRLAMA
+========================= */
+
+document
+    .getElementById(
+        "resetButton"
+    )
+    .addEventListener(
+        "click",
+        function () {
+
+            const answer =
+                confirm(
+                    "Oyunu tamamen sıfırlamak istediğinize emin misiniz?"
+                );
+
+
+            if (!answer)
+                return;
+
+
+            localStorage.clear();
+
+
+            clicks = 0;
+
+            money = 0;
+
+            power = 1;
+
+            autoClickers = 0;
+
+            powerCost = 50;
+
+            autoCost = 250;
+
+
+            playerName = null;
+
+
+            document.getElementById(
+                "nameScreen"
+            ).style.display = "flex";
+
+
+            updateScreen();
+
+        }
+    );
+
+
+/* =========================
+   DÜKKAN
+========================= */
+
+function openShop() {
+
+    document.getElementById(
+        "shop"
+    ).style.display = "block";
+
+
+    updateShop();
+
+}
+
+
+function closeShop() {
+
+    document.getElementById(
+        "shop"
+    ).style.display = "none";
+
+}
+
+
+function buyItem(item) {
+
+    if (
+        shopItems[item]
+    )
+        return;
+
+
+    const prices = {
+
+        water: 5000,
+
+        tea: 75000,
+
+        lemonade: 300000,
+
+        energy: 1000000,
+
+        oil: 2500000
+
+    };
+
+
+    if (
+        item === "offer"
+    ) {
+
+        if (
+            clicks < 2000000000
+        ) {
+
+            alert(
+                "Bu teklif 2 milyar toplam tıklamada açılır!"
+            );
+
+            return;
+
+        }
+
+
+        const currentMultiplier =
+            getMultiplier(clicks);
+
+
+        clicks = 0;
+
+        money = 0;
+
+
+        window.offerMultiplier =
+            currentMultiplier * 4;
+
+
+        shopItems.offer =
+            true;
+
+
+        localStorage.setItem(
+            "offerMultiplier",
+            window.offerMultiplier
+        );
+
+
+        localStorage.setItem(
+            "shopItems",
+            JSON.stringify(
+                shopItems
+            )
+        );
+
+
+        updateScreen();
+
+        updateShop();
+
+
+        alert(
+            "👑 Lütfi Bey'in Teklifi kabul edildi!\n\n" +
+            "Tıklama sayın ve paran sıfırlandı.\n" +
+            "Çarpanın artık ×" +
+            window.offerMultiplier +
+            "!"
+        );
+
+
+        return;
+
+    }
+
+
+    const price =
+        prices[item];
+
+
+    if (
+        money < price
+    ) {
+
+        alert(
+            "Yeterli paran yok!"
+        );
+
+        return;
+
+    }
+
+
+    money -= price;
+
+
+    shopItems[item] =
+        true;
+
+
+    localStorage.setItem(
+        "shopItems",
+        JSON.stringify(
+            shopItems
+        )
+    );
+
+
+    updateScreen();
+
+    updateShop();
+
+}
+
+
+function updateShop() {
+
+    const buttons = {
+
+        water: "buyWater",
+
+        tea: "buyTea",
+
+        lemonade: "buyLemonade",
+
+        energy: "buyEnergy",
+
+        oil: "buyOil"
+
+    };
+
+
+    Object.keys(
+        buttons
+    ).forEach(
+        function (item) {
+
+            const button =
+                document.getElementById(
+                    buttons[item]
+                );
+
+
+            if (!button)
+                return;
+
+
+            if (
+                shopItems[item]
+            ) {
+
+                button.disabled =
+                    true;
+
+
+                button.textContent =
+                    "ALINDI";
+
+            }
+
+            else {
+
+                button.disabled =
+                    false;
+
+
+                button.textContent =
+                    "SATIN AL";
+
+            }
+
+        }
+    );
+
+
+    const offerButton =
+        document.getElementById(
+            "buyOffer"
+        );
+
+
+    if (!offerButton)
+        return;
+
+
+    if (
+        shopItems.offer
+    ) {
+
+        offerButton.disabled =
+            true;
+
+
+        offerButton.textContent =
+            "ALINDI";
+
+    }
+
+    else if (
+        clicks >= 2000000000
+    ) {
+
+        offerButton.disabled =
+            false;
+
+
+        offerButton.textContent =
+            "SATIN AL";
+
+    }
+
+    else {
+
+        offerButton.disabled =
+            true;
+
+
+        offerButton.textContent =
+            "KİLİTLİ";
+
+    }
+
+}
+
+
+/* =========================
+   LİDERLİK TABLOSU
+========================= */
+
+function openLeaderboard() {
+
+    document.getElementById(
+        "leaderboardScreen"
+    ).style.display = "flex";
+
+
+    showLeaderboard();
+
+}
+
+
+function closeLeaderboard() {
+
+    document.getElementById(
+        "leaderboardScreen"
+    ).style.display = "none";
+
+}
+
+
+async function showLeaderboard() {
+
+    const list =
+        document.getElementById(
+            "leaderboardList"
+        );
+
+
+    list.innerHTML = "";
+
+
+    if (
+        !window.firebaseDB
+    ) {
+
+        list.innerHTML =
+            "<p>Firebase bağlantısı bekleniyor...</p>";
+
+        return;
+
+    }
+
+
+    try {
+
+        const playersSnapshot =
+            await window.firebaseGetDocs(
+
+                window.firebaseQuery(
+
+                    window.firebaseCollection(
+                        window.firebaseDB,
+                        "players"
+                    ),
+
+                    window.firebaseOrderBy(
+                        "clicks",
+                        "desc"
+                    ),
+
+                    window.firebaseLimit(
+                        20
+                    )
+
+                )
+
+            );
+
+
+        const players = [];
+
+
+        playersSnapshot.forEach(
+            (doc) => {
+
+                const data =
+                    doc.data();
+
+
+                players.push({
+
+                    name:
+                        data.name ||
+                        "İsimsiz",
+
+                    clicks:
+                        data.clicks ||
+                        0,
+
+                    money:
+                        data.money ||
+                        0,
+
+                    time:
+                        data.time ||
+                        0
+
+                });
+
+            }
+        );
+
+
+        players.sort(
+            (a, b) =>
+                b.clicks - a.clicks
+        );
+
+
+        players
+            .slice(0, 20)
+            .forEach(
+                (
+                    player,
+                    index
+                ) => {
+
+                    let medal =
+                        index + 1;
+
+
+                    if (
+                        index === 0
+                    )
+                        medal = "🥇";
+
+                    else if (
+                        index === 1
+                    )
+                        medal = "🥈";
+
+                    else if (
+                        index === 2
+                    )
+                        medal = "🥉";
+
+
+                    const hours =
+                        Math.floor(
+                            player.time /
+                            3600
+                        );
+
+
+                    const minutes =
+                        Math.floor(
+                            (
+                                player.time %
+                                3600
+                            ) / 60
+                        );
+
+
+                    list.innerHTML += `
+
+                        <div class="leaderboard-player">
+
+                            <div class="leaderboard-rank">
+                                ${medal}
+                            </div>
+
+                            <div class="leaderboard-name">
+                                ${player.name}
+                            </div>
+
+                            <div class="leaderboard-stats">
+
+                                🖱️
+                                ${player.clicks.toLocaleString()}<br>
+
+                                💰
+                                ${player.money.toLocaleString()}<br>
+
+                                ⏱️
+                                ${hours}s
+                                ${minutes}dk
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+            );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Liderlik tablosu hatası:",
+            error
+        );
+
+
+        list.innerHTML =
+            "<p>Liderlik tablosu yüklenemedi.</p>";
+
+    }
+
+}
+
+
+/* =========================
+   BAŞLANGIÇ
+========================= */
+
+updateScreen();
+
+
+</script>
+
+
+</body>
+
+</html>
